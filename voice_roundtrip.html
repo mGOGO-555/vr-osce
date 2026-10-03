@@ -19,7 +19,7 @@
 </head>
 <body>
 <h1>音声1往復テスト（case01・PoC）</h1>
-<div class="small">マイク → Quest内の音声認識(Whisper tiny, asr.js) → case01の既存Q&A照合 → 録音済み患者音声の再生。speechSynthesis / Web Speech API は使いません。</div>
+<div class="small">マイク → Quest内の音声認識(Whisper tiny) → case01のQ&A照合 → <b>caseId+answerIdだけ</b>をTTS Workerへ送信 → 返ったMP3を再生。学生の音声・認識文字列はサーバーへ送りません。<br><b>患者音声はAI生成音声です</b></div>
 
 <div class="card">
   <h2>1. モデルを読み込む</h2>
@@ -31,58 +31,38 @@
   <h2>2. 患者へ質問する</h2>
   <button id="btnRec" disabled>録音開始</button>
   <div class="small">「録音開始」→ 質問する（例：「痛みはありますか」）→ 「録音停止」。</div>
-  <pre id="out">認識結果：\n患者回答：\n音声：</pre>
-</div>
-
-<div class="card">
-  <h2>患者音声ファイルの配置状況</h2>
-  <pre id="files">（確認中）</pre>
-  <div class="small">配置先：assets/voice/case01/（対応表は manifest.json）。</div>
+  <pre id="out">認識結果：
+患者回答：
+音声：</pre>
 </div>
 
 <script type="module">
 import { asr, prepare, startRecording, stopAndRecognize, matchItem } from './asr.js';
 const $ = (id) => document.getElementById(id);
-const DIR = './assets/voice/case01/';
-let CASE = null, MAN = {}, ctx = null, cur = null;
-const buffers = {};   // 質問ID → デコード済み音声（無ければ null）
+// TTS Worker（Cloudflare）のURL。?tts=https://... でも上書き可。ここにAPIキーは置かない
+const TTS_URL = new URLSearchParams(location.search).get('tts') || 'https://osce-tts.minami43mail.workers.dev/';
+const CASE_ID = 'case01';
+let CASE = null, ctx = null, cur = null;
 
-// 既存のcase01 JSON（症例内容は読み取りのみ）
+// 既存のcase01 JSON（症例内容は読み取りのみ。患者回答の文字表示用）
 const items = () => CASE.menu.filter((m) => m.type === 'dialogue').flatMap((m) => m.items);
 const respOf = (it) => (typeof it.response === 'string' ? it.response : JSON.stringify(it.response));
-
-async function loadFiles() {
-  CASE = await (await fetch('./cases/case01_stroke.json')).json();
-  try { MAN = await (await fetch(DIR + 'manifest.json')).json(); } catch (e) { MAN = {}; }
-  const lines = [];
-  for (const it of items()) {
-    const f = MAN[it.id]; let state = '未登録';
-    if (f) {
-      try {
-        const r = await fetch(DIR + f);
-        const ct = r.headers.get('content-type') || '';
-        if (r.ok && !ct.includes('text/html')) { buffers[it.id] = await r.arrayBuffer(); state = '配置済'; } else { buffers[it.id] = null; state = '音声ファイル未配置'; }
-      } catch (e) { buffers[it.id] = null; state = '音声ファイル未配置'; }
-    }
-    lines.push(`${it.id}（${it.label}） → ${f || '-'} ：${state}`);
-  }
-  $('files').textContent = lines.join('\n');
-}
 
 // ユーザー操作の中で呼ぶ：AudioContextをresume（Questのautoplay制限対策）
 function unlockAudio() {
   if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
   if (ctx.state === 'suspended') ctx.resume();
 }
-async function playFor(id) {
-  const raw = buffers[id];
-  if (!raw) return '音声ファイル未配置';
+// 送信するのは {caseId, answerId} のみ。返ったaudio/mpegをデコードして再生
+async function speakViaWorker(answerId) {
   try {
-    const ab = await ctx.decodeAudioData(raw.slice(0));
+    const r = await fetch(TTS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ caseId: CASE_ID, answerId }) });
+    if (!r.ok) return '音声生成に失敗しました';
+    const ab = await ctx.decodeAudioData(await r.arrayBuffer());
     if (cur) { try { cur.stop(); } catch (e) { /* noop */ } }
     cur = ctx.createBufferSource(); cur.buffer = ab; cur.connect(ctx.destination); cur.start();
-    return '再生中（' + MAN[id] + '）';
-  } catch (e) { return '再生失敗：' + (e.message || e); }
+    return '再生中（AI生成音声）';
+  } catch (e) { return '音声生成に失敗しました'; }
 }
 
 asr.onChange = () => {
@@ -103,17 +83,17 @@ $('btnRec').onclick = async () => {
     const text = await stopAndRecognize();
     const it = text ? matchItem(text, items()) : null;
     let sound = '-';
-    if (it) sound = await playFor(it.id);
+    if (it) sound = await speakViaWorker(it.id);
     $('out').innerHTML = '';
     const t = (s) => document.createTextNode(s);
     $('out').append(t(`認識結果：${text || '（認識できませんでした）'}\n`),
       t(`患者回答：${it ? respOf(it) : '（該当する質問なし）'}\n`),
       t(`照合した質問：${it ? it.id + '（' + it.label + '）' : '-'}\n`),
-      t('音声：' + sound));
+      t('音声：'), (() => { const e = document.createElement('span'); e.textContent = sound; e.className = sound.startsWith('音声生成に失敗') ? 'small ng' : 'small'; return e; })());
     $('btnRec').textContent = '録音開始'; $('btnRec').disabled = false;
   }
 };
-loadFiles().catch((e) => { $('files').textContent = '読み込み失敗：' + e; });
+fetch('./cases/case01_stroke.json').then((r) => r.json()).then((j) => { CASE = j; });
 </script>
 </body>
 </html>

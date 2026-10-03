@@ -1,0 +1,619 @@
+{
+  "station_id": "copd_exertion_03",
+  "title": "COPD急性増悪後患者の労作時呼吸状態の評価（立位・歩行前）",
+  "time_limit_sec": 420,
+  "room": {
+    "number": "208",
+    "name": "鈴木 健二"
+  },
+  "patient": {
+    "model": "./assets/patient_case03.glb",
+    "motion": {
+      "type": "dyspnea",
+      "severity": 1,
+      "speed": 0.9,
+      "breath": {
+        "rate": 22,
+        "amp": 1.8
+      }
+    },
+    "voice": {
+      "pitch": 0.9,
+      "rate": 0.8,
+      "pause": true
+    }
+  },
+  "props": {
+    "wheelchair": false
+  },
+  "intro": "あなたは担当理学療法士です。\n\n66歳男性、COPD（重症）。肺炎を契機とした急性増悪から回復期（入院8日目）。在宅酸素（1L/分）を使用中。\n\nベッドサイドで呼吸状態と労作時の反応を評価し、安全に立位・歩行練習へ進めるか判断してください。\n\n制限時間：7分",
+  "menu": [
+    {
+      "id": "interview",
+      "label": "問診",
+      "type": "dialogue",
+      "items": [
+        {
+          "id": "ask_dyspnea",
+          "label": "息苦しさはどのくらいですか？",
+          "response": "じっとしていればそれほどでもないですが、動くとすぐに息が上がります。トイレまで歩くのも苦しいです。",
+          "say": [
+            "どのくらい苦",
+            "どれくらい苦",
+            "mMRC",
+            "いきぎれ",
+            "いきぐる",
+            "くるしい",
+            "こきゅう",
+            "しんどい",
+            "ぜいぜい",
+            "ゼーゼー",
+            "きつい",
+            "くるし",
+            "ぼるぐ",
+            "ボルグ",
+            "息切れ",
+            "苦しい",
+            "いき",
+            "呼吸",
+            "息切",
+            "息苦",
+            "苦し",
+            "息"
+          ]
+        },
+        {
+          "id": "ask_cough_sputum",
+          "label": "咳や痰はありますか？",
+          "response": "朝に黄色い痰が少し出ます。昨日より減ってきました。",
+          "say": [
+            "からせき",
+            "ごほごほ",
+            "ねばねば",
+            "りょう",
+            "いろ",
+            "せき",
+            "たん",
+            "咳が",
+            "痰が",
+            "咳",
+            "痰",
+            "色",
+            "量"
+          ]
+        },
+        {
+          "id": "ask_prior_adl",
+          "label": "入院前の生活はどうでしたか？",
+          "response": "在宅酸素を使っていて、家の中は歩けましたが、入浴や階段は休みながらでした。買い物は妻と一緒です。",
+          "say": [
+            "にゅういんまえ",
+            "ひとり暮らし",
+            "にちじょう",
+            "一人暮らし",
+            "あるいて",
+            "おすまい",
+            "お住まい",
+            "せいかつ",
+            "ひとりで",
+            "かぞく",
+            "しごと",
+            "じたく",
+            "ふだん",
+            "一人で",
+            "入院前",
+            "家では",
+            "歩いて",
+            "かじ",
+            "つえ",
+            "仕事",
+            "以前",
+            "前の",
+            "前は",
+            "家事",
+            "家族",
+            "日常",
+            "普段",
+            "生活",
+            "自宅",
+            "杖"
+          ]
+        },
+        {
+          "id": "ask_smoking",
+          "label": "喫煙歴を教えてください",
+          "response": "40年間、1日20本吸っていました。2年前にやめました。",
+          "say": [
+            "きつえん",
+            "きんえん",
+            "なんねん",
+            "ほんすう",
+            "たばこ",
+            "タバコ",
+            "パック",
+            "すっ",
+            "何年",
+            "喫煙",
+            "本数",
+            "煙草",
+            "禁煙",
+            "吸"
+          ]
+        },
+        {
+          "id": "ask_breathing_strategy",
+          "label": "息が苦しくなったとき、どうしていますか？",
+          "response": "座って、口をすぼめて息をするよう習いました。でも、あわてると忘れてしまいます。",
+          "say": [
+            "どうされていますか",
+            "どうしていますか",
+            "くるしくなった",
+            "どうされますか",
+            "きゅうにゅう",
+            "どうしますか",
+            "苦しいときは",
+            "苦しくなった",
+            "くちすぼめ",
+            "どうしてい",
+            "らくになる",
+            "苦しいとき",
+            "たいしょ",
+            "どうされ",
+            "どうして",
+            "どうする",
+            "やすんで",
+            "口すぼめ",
+            "楽になる",
+            "おちつ",
+            "くふう",
+            "やすむ",
+            "休んで",
+            "落ち着",
+            "こつ",
+            "コツ",
+            "休む",
+            "吸入",
+            "対処",
+            "工夫",
+            "休"
+          ]
+        },
+        {
+          "id": "ask_chest_pain",
+          "label": "胸の痛みやめまいはありませんか？",
+          "response": "胸の痛みはありません。立つとふらつくことは、ときどきあります。",
+          "say": [
+            "しめつけ",
+            "しんぞう",
+            "どきどき",
+            "ひやあせ",
+            "ふらふら",
+            "ドキドキ",
+            "締め付け",
+            "どうき",
+            "ふらつ",
+            "めまい",
+            "冷や汗",
+            "むね",
+            "動悸",
+            "心臓",
+            "胸"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "label": "観察",
+      "type": "finding",
+      "items": [
+        {
+          "id": "observe_breathing",
+          "label": "呼吸パターン",
+          "response": "安静時から呼吸数が多く、口すぼめ呼吸を断続的に行っている。呼気が延長している。"
+        },
+        {
+          "id": "observe_accessory",
+          "label": "呼吸補助筋・胸郭",
+          "response": "吸気時に胸鎖乳突筋の収縮と肩の挙上がみられる。胸郭は樽状で、拡張は小さい。"
+        },
+        {
+          "id": "observe_color",
+          "label": "顔色・口唇・爪",
+          "response": "顔色は軽度に蒼白。口唇・爪にチアノーゼは目立たない。"
+        },
+        {
+          "id": "observe_posture",
+          "label": "座位姿勢",
+          "response": "前傾位で、両手をベッドや大腿について座っている。"
+        },
+        {
+          "id": "observe_physique",
+          "label": "体格",
+          "response": "やせ型で、鎖骨上窩がくぼんでいる。四肢の筋量が少ない。"
+        }
+      ]
+    },
+    {
+      "id": "assess",
+      "label": "評価項目",
+      "type": "result",
+      "items": [
+        {
+          "id": "assess_vitals",
+          "label": "バイタルサイン（SpO2・脈拍・血圧）",
+          "response": "【座位・安静】SpO2 93%（鼻カニュラ 酸素1L/分）、脈拍 96 回/分、血圧 128／74 mmHg。",
+          "if_state": {
+            "walked": "【歩行直後】SpO2 86%（酸素1L/分）、脈拍 118 回/分、血圧 146／84 mmHg。",
+            "stood": "【立位直後】SpO2 91%（酸素1L/分）、脈拍 104 回/分、血圧 134／78 mmHg。"
+          }
+        },
+        {
+          "id": "assess_resp_rate",
+          "label": "呼吸数",
+          "response": "22 回/分。浅く速い。",
+          "if_state": {
+            "walked": "32 回/分。会話が1〜2語に途切れる。",
+            "stood": "26 回/分。会話は短文になる。"
+          }
+        },
+        {
+          "id": "assess_borg",
+          "label": "息切れ（修正Borg）",
+          "response": "【修正Borg】1（ごく弱い）",
+          "if_state": {
+            "walked": "【修正Borg】6（強い）",
+            "stood": "【修正Borg】3（中等度）"
+          }
+        },
+        {
+          "id": "assess_auscultation",
+          "label": "呼吸音の聴診",
+          "response": "両側の下肺野で呼吸音が減弱している。右下肺野に軽度の湿性ラ音。喘鳴はごく軽度。"
+        },
+        {
+          "id": "assess_muscle",
+          "label": "下肢・握力の筋力",
+          "response": "【MMT】下肢 4レベル（膝伸展 4、股関節屈曲 4）。握力 右 22 kg／左 20 kg。"
+        },
+        {
+          "id": "assess_sit_to_stand",
+          "label": "立ち上がり評価",
+          "response": null,
+          "log_action": "start_sit_to_stand"
+        },
+        {
+          "id": "assess_standing",
+          "label": "立位保持",
+          "response": "【立位保持】手を大腿に置いて前傾位で保持できる。保持中は口すぼめ呼吸を行い、SpO2 91%、呼吸数 26 回/分。会話は短文になる。"
+        },
+        {
+          "id": "assess_gait",
+          "label": "歩行（前方へ数歩）",
+          "response": "【歩行】介助下で前方へ数歩。2歩目以降に呼吸数が増え、途中で立ち止まって前傾位で休む。SpO2 86%、脈拍 118 回/分、Borg 6。回復に約2分かかった。",
+          "if_assist": {
+            "assist_pursed_lip": "【歩行】口すぼめ呼吸を促したことで、ペースを保って前方へ数歩進めた。SpO2 は 89%までの低下にとどまり、脈拍 110 回/分、Borg 5。回復は約1分。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "label": "安全確認",
+      "type": "result",
+      "items": [
+        {
+          "id": "check_patient",
+          "label": "患者の状態を確認する",
+          "response": "意識は清明。会話はできるが、1文ごとに息継ぎが必要。"
+        },
+        {
+          "id": "check_oxygen",
+          "label": "酸素投与の状態を確認する",
+          "response": "鼻カニュラで酸素1L/分。カニュラは外れておらず、チューブは歩行に十分な長さがある。携帯酸素の準備もできている。"
+        },
+        {
+          "id": "check_stop_criteria",
+          "label": "運動の中止基準を確認する",
+          "response": "中止基準：SpO2 88%未満、脈拍 130回/分超、Borg 7以上、胸痛・強いふらつき・チアノーゼの出現。"
+        },
+        {
+          "id": "check_pre_stand_safety",
+          "label": "立ち上がり前の安全を確認する",
+          "response": "周囲の障害物と床の状態を確認した。休める椅子を進行方向に用意した。"
+        }
+      ]
+    },
+    {
+      "id": "assist",
+      "label": "介助・声かけ",
+      "type": "result",
+      "items": [
+        {
+          "id": "assist_voice",
+          "label": "声かけをする",
+          "response": "「ゆっくり息を吐きながら立ちましょう。苦しくなったらすぐに教えてください。」と伝えた。患者は「はい」とうなずいた。"
+        },
+        {
+          "id": "assist_pursed_lip",
+          "label": "口すぼめ呼吸を促す",
+          "response": "「鼻から吸って、口をすぼめてゆっくり吐いてください。」と呼吸を誘導した。患者は呼吸のペースを合わせた。"
+        }
+      ]
+    }
+  ],
+  "sit_to_stand": {
+    "during_text": "患者が立ち上がります。\n動作と呼吸をよく観察してください。",
+    "after_text": "立ち上がり動作が終わりました。\n気づいた点を観察してください。",
+    "observations": [
+      {
+        "id": "observe_stand_motion",
+        "label": "立ち上がり動作",
+        "response": "前傾して手を膝に置き、ゆっくり立ち上がった。動作は安定していて、ふらつきはない。"
+      },
+      {
+        "id": "observe_breath_after",
+        "label": "呼吸の変化",
+        "response": "立位後に呼吸数が増え、口すぼめ呼吸が増えた。会話は短文になる。"
+      },
+      {
+        "id": "observe_stand_posture",
+        "label": "立位姿勢",
+        "response": "前傾位で両手を大腿に置き、肩を挙上して呼吸している。"
+      }
+    ]
+  },
+  "judgement": {
+    "steps": [
+      {
+        "id": "problem",
+        "type": "rank",
+        "max_select": 3,
+        "prompt": "この患者の問題点を、重要だと思う順に最大3つ選んでください。\n（選んだ順が優先順位です。もう一度押すと取り消せます）",
+        "log_prefix": "select_problem",
+        "options": [
+          {
+            "id": "exertional_hypoxemia",
+            "label": "労作時の低酸素（SpO2の低下）",
+            "weight": 3,
+            "rationale": "立位で91%、歩行で86%まで低下。中止基準に近く最優先"
+          },
+          {
+            "id": "exertional_dyspnea",
+            "label": "労作時の息切れ（Borg 6）",
+            "weight": 2,
+            "rationale": "動作とともに悪化し、歩行練習の継続を制限する"
+          },
+          {
+            "id": "inefficient_breathing",
+            "label": "非効率な呼吸（浅く速い・補助筋の使用）",
+            "weight": 2,
+            "rationale": "呼吸数が多く肩が挙上し、呼吸の仕事量が大きい"
+          },
+          {
+            "id": "low_muscle_mass",
+            "label": "体力・筋量の低下（やせ・筋量減少）",
+            "weight": 1,
+            "rationale": "長期的な課題。今回の動作での優先度は高くない"
+          },
+          {
+            "id": "sputum_retention",
+            "label": "気道分泌物（痰）",
+            "weight": 1,
+            "rationale": "痰は減少傾向で、聴診所見も軽度"
+          },
+          {
+            "id": "right_hemiparesis",
+            "label": "右下肢の運動麻痺",
+            "weight": 0,
+            "rationale": "麻痺はなく、下肢の筋力も保たれている"
+          },
+          {
+            "id": "severe_knee_pain",
+            "label": "強い膝の痛み",
+            "weight": 0,
+            "rationale": "痛みの訴えはない"
+          }
+        ]
+      },
+      {
+        "id": "action",
+        "prompt": "次にどのような対応をしますか？",
+        "log_prefix": "select_action",
+        "options": [
+          {
+            "id": "rest_pursed_lip_recheck",
+            "label": "休息と口すぼめ呼吸を促し、SpO2が回復してから、酸素量について医師・看護師に相談して再評価する",
+            "correct": true,
+            "score": 2
+          },
+          {
+            "id": "stop_without_report",
+            "label": "歩行を中止して安静にする（報告はしない）",
+            "correct": false,
+            "score": 1
+          },
+          {
+            "id": "extend_distance",
+            "label": "SpO2低下は想定内として、そのまま歩行距離を延ばす",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "remove_oxygen_walk",
+            "label": "酸素を外して歩行練習を続ける",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "stairs_now",
+            "label": "運動負荷を上げるため、階段昇降を行う",
+            "correct": false,
+            "score": 0
+          }
+        ]
+      }
+    ]
+  },
+  "scoring": {
+    "safety_cap_when_error": 1,
+    "safety_errors": [
+      {
+        "id": "spo2_not_checked",
+        "requires": "assess_vitals",
+        "before": "start_sit_to_stand",
+        "message": "立位・歩行の前に、SpO2・脈拍を必ず測定してください。"
+      }
+    ],
+    "domains": [
+      {
+        "id": "safety",
+        "label": "Safety",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "check_patient",
+            "short": "患者の状態確認"
+          },
+          {
+            "id": "ask_dyspnea",
+            "short": "息苦しさの確認"
+          },
+          {
+            "id": "assess_vitals",
+            "short": "SpO2・脈拍の測定"
+          },
+          {
+            "id": "check_oxygen",
+            "short": "酸素投与の確認"
+          },
+          {
+            "id": "check_stop_criteria",
+            "short": "中止基準の確認"
+          }
+        ],
+        "two": 4,
+        "one": 2,
+        "good": "立ち上がり前に{items}を行えました。",
+        "missed": "立ち上がり前に{items}を行っていません。"
+      },
+      {
+        "id": "communication",
+        "label": "Communication",
+        "type": "coverage",
+        "items": [
+          {
+            "id": "ask_dyspnea",
+            "short": "息苦しさの聴取"
+          },
+          {
+            "id": "ask_cough_sputum",
+            "short": "咳・痰の聴取"
+          },
+          {
+            "id": "ask_prior_adl",
+            "short": "入院前の生活の聴取"
+          },
+          {
+            "id": "ask_breathing_strategy",
+            "short": "息切れ時の対処の聴取"
+          },
+          {
+            "id": "ask_chest_pain",
+            "short": "胸痛・めまいの聴取"
+          },
+          {
+            "id": "assist_voice",
+            "short": "立ち上がりの声かけ"
+          }
+        ],
+        "two": 5,
+        "one": 2,
+        "good": "{items}を行えました。",
+        "missed": "{items}を行っていません。"
+      },
+      {
+        "id": "observation",
+        "label": "Observation",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "observe_breathing",
+            "short": "呼吸パターン"
+          },
+          {
+            "id": "observe_accessory",
+            "short": "呼吸補助筋・胸郭"
+          },
+          {
+            "id": "observe_color",
+            "short": "顔色・口唇・爪"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を観察できました。",
+        "missed": "立ち上がり前の{items}の観察がありませんでした。"
+      },
+      {
+        "id": "assessment",
+        "label": "Assessment",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "required": [
+          {
+            "id": "start_sit_to_stand",
+            "short": "立ち上がり評価"
+          }
+        ],
+        "required_missed": "立ち上がり評価を実施しませんでした。",
+        "items": [
+          {
+            "id": "assess_vitals",
+            "short": "バイタルサイン"
+          },
+          {
+            "id": "assess_resp_rate",
+            "short": "呼吸数"
+          },
+          {
+            "id": "assess_borg",
+            "short": "息切れの評価"
+          },
+          {
+            "id": "assess_auscultation",
+            "short": "呼吸音の聴診"
+          },
+          {
+            "id": "assess_muscle",
+            "short": "筋力"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を評価できました。",
+        "missed": "立ち上がり前の{items}の評価がありませんでした。"
+      },
+      {
+        "id": "reasoning",
+        "label": "Clinical reasoning",
+        "type": "rank",
+        "step": "problem",
+        "good": "最優先の問題点（労作時の低酸素）を1位に選べました。",
+        "partial": "最優先の問題点は選べましたが、順位が1位ではありませんでした。",
+        "irrelevant": "今回の患者に当てはまらない問題点（{items}）を選んでいます。",
+        "correct_text": "最優先の問題点は「{correct}」でした。"
+      },
+      {
+        "id": "action",
+        "label": "Action selection",
+        "type": "choice",
+        "step": "action",
+        "good": "推奨される対応を選択できました。",
+        "correct_text": "推奨される対応は「{correct}」でした。"
+      }
+    ]
+  }
+}

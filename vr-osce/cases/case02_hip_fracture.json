@@ -1,0 +1,650 @@
+{
+  "station_id": "hip_fx_walker_02",
+  "title": "大腿骨頸部骨折術後患者の立ち上がり・歩行器歩行前評価",
+  "time_limit_sec": 420,
+  "room": {
+    "number": "412",
+    "name": "佐藤 花子"
+  },
+  "patient": {
+    "model": "./assets/patient_case02.glb",
+    "motion": {
+      "type": "offload",
+      "side": "left",
+      "severity": 1,
+      "speed": 1,
+      "walker": true,
+      "breath": {
+        "rate": 18,
+        "amp": 1
+      }
+    },
+    "voice": {
+      "pitch": 1.35,
+      "rate": 0.8
+    },
+    "glasses": true
+  },
+  "props": {
+    "wheelchair": true
+  },
+  "intro": "あなたは担当理学療法士です。\n\n81歳女性、左大腿骨頸部骨折に対する人工骨頭置換術（後方アプローチ）後10日。\n\nベッドサイドで患者の状態を評価し、安全に立ち上がり・歩行器歩行を開始できるか判断してください。\n\n制限時間：7分",
+  "menu": [
+    {
+      "id": "interview",
+      "label": "問診",
+      "type": "dialogue",
+      "items": [
+        {
+          "id": "ask_pain",
+          "label": "痛みはありますか？",
+          "response": "動かすと左の足の付け根が痛みます。じっとしていればそれほどでもないです。立つときは、ズキッときます。",
+          "say": [
+            "いたくな",
+            "きつい所",
+            "ずきずき",
+            "どこか痛",
+            "いたい",
+            "つらい",
+            "痛くな",
+            "違和感",
+            "いた",
+            "痛い",
+            "辛い",
+            "痛"
+          ]
+        },
+        {
+          "id": "ask_dizziness",
+          "label": "めまいや立ちくらみはありませんか？",
+          "response": "朝、起きたときにふらっとしました。今はだいじょうぶです。",
+          "say": [
+            "たいちょう",
+            "たちくらみ",
+            "気持ちわる",
+            "立ちくらみ",
+            "くらくら",
+            "ふらふら",
+            "ぼうっと",
+            "ぼーっと",
+            "気持ち悪",
+            "はきけ",
+            "ふらつ",
+            "めまい",
+            "吐き気",
+            "目が回",
+            "体調",
+            "気分",
+            "頭が"
+          ]
+        },
+        {
+          "id": "ask_precautions",
+          "label": "手術後の動かし方の注意は聞いていますか？",
+          "response": "足を組んじゃいけないのと、深くかがんではいけないと聞きました。ほかは……忘れてしまって。",
+          "say": [
+            "しゅじゅつご",
+            "こかんせつ",
+            "してはいけ",
+            "たいじゅう",
+            "だっきゅう",
+            "あしをく",
+            "かじゅう",
+            "きをつけ",
+            "せつめい",
+            "ちゅうい",
+            "動かし方",
+            "気をつけ",
+            "きいて",
+            "きんし",
+            "手術後",
+            "聞いて",
+            "股関節",
+            "足を組",
+            "だめ",
+            "ひざ",
+            "ダメ",
+            "体重",
+            "注意",
+            "禁止",
+            "脱臼",
+            "荷重",
+            "説明",
+            "膝"
+          ]
+        },
+        {
+          "id": "ask_prior_adl",
+          "label": "入院前の生活はどうでしたか？",
+          "response": "一人暮らしです。家の中は壁や家具につかまって歩いて、外は杖でした。買い物は娘が手伝ってくれます。",
+          "say": [
+            "にゅういんまえ",
+            "ひとり暮らし",
+            "にちじょう",
+            "一人暮らし",
+            "あるいて",
+            "おすまい",
+            "お住まい",
+            "せいかつ",
+            "ひとりで",
+            "かぞく",
+            "しごと",
+            "じたく",
+            "ふだん",
+            "一人で",
+            "入院前",
+            "家では",
+            "歩いて",
+            "かじ",
+            "つえ",
+            "仕事",
+            "以前",
+            "前の",
+            "前は",
+            "家事",
+            "家族",
+            "日常",
+            "普段",
+            "生活",
+            "自宅",
+            "杖"
+          ]
+        },
+        {
+          "id": "ask_fall",
+          "label": "転んだことはありますか？",
+          "response": "この骨折も、夜中にトイレへ行くときに転んでです。それから、立つのが怖くて。",
+          "say": [
+            "てんとう",
+            "たおれ",
+            "つまず",
+            "つまづ",
+            "ふらつ",
+            "おち",
+            "ころ",
+            "すべ",
+            "倒れ",
+            "落ち",
+            "転倒",
+            "滑",
+            "転"
+          ]
+        },
+        {
+          "id": "ask_goal",
+          "label": "これからどうなりたいですか？",
+          "response": "家に帰りたいです。トイレまで自分で行けるようになりたい。",
+          "say": [
+            "あるけるように",
+            "どうなりたい",
+            "歩けるように",
+            "どうしたい",
+            "もくひょう",
+            "これから",
+            "じたくに",
+            "たいいん",
+            "なりたい",
+            "先のこと",
+            "かえり",
+            "きぼう",
+            "こんご",
+            "したい",
+            "ねがい",
+            "自宅に",
+            "めざ",
+            "今後",
+            "希望",
+            "帰り",
+            "目指",
+            "目標",
+            "退院",
+            "願い"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "label": "観察",
+      "type": "finding",
+      "items": [
+        {
+          "id": "observe_wound",
+          "label": "手術創と腫れ",
+          "response": "左股関節外側の創部は乾燥しており、発赤・滲出は目立たない。左大腿に軽度の腫脹がある。"
+        },
+        {
+          "id": "observe_leg_position",
+          "label": "下肢の肢位",
+          "response": "座位で左足部は右より前方に置かれ、左膝はやや外へ開いている。股関節の内転・内旋位はみられない。"
+        },
+        {
+          "id": "observe_posture",
+          "label": "座位姿勢",
+          "response": "円背があり、体幹は右へ少し傾いている。右臀部に体重をのせて座っている。"
+        },
+        {
+          "id": "observe_weight_bearing",
+          "label": "左右の荷重",
+          "response": "右臀部・右足部への荷重が大きく、左は軽くのせている程度。"
+        },
+        {
+          "id": "observe_arousal",
+          "label": "患者の覚醒状態",
+          "response": "覚醒しており、はっきり答える。ときどき質問を聞き返す。"
+        }
+      ]
+    },
+    {
+      "id": "assess",
+      "label": "評価項目",
+      "type": "result",
+      "items": [
+        {
+          "id": "assess_pain",
+          "label": "疼痛評価（NRS）",
+          "response": "【疼痛（NRS）】安静時 2／10、座位での体重移動時 4／10（左股関節）。",
+          "if_state": {
+            "stood": "【疼痛（NRS）】安静時 2／10、立ち上がり時 6／10（左股関節）。立位になると 4／10に軽減。"
+          }
+        },
+        {
+          "id": "assess_rom",
+          "label": "股関節の関節可動域",
+          "response": "【ROM】左股関節（自動介助）：屈曲 80°（90°を超えない範囲）、外転 25°、伸展 0°。\n内転・内旋は禁忌肢位のため測定しない。\n右股関節：屈曲 110°、制限なし。"
+        },
+        {
+          "id": "assess_mmt",
+          "label": "下肢筋力（MMT）",
+          "response": "【MMT】左：股関節屈曲 3、外転 3、伸展 3−、膝伸展 3＋。\n右：股関節屈曲 4、膝伸展 4。\n※左は疼痛のため最大努力が困難。"
+        },
+        {
+          "id": "assess_vitals",
+          "label": "バイタルサイン",
+          "response": "【座位・安静】血圧 132／78 mmHg、脈拍 78 回/分、SpO2 96%（室内気）。",
+          "if_state": {
+            "stood": "【立位後】血圧 118／70 mmHg（座位より低下）、脈拍 90 回/分、SpO2 95%。軽いふらつきの訴えあり。"
+          }
+        },
+        {
+          "id": "assess_sitting_balance",
+          "label": "座位バランス",
+          "response": "【座位バランス】支持なしで保持できる。右へ傾きやすいが、自分で戻れる。左への体重移動は疼痛のため小さい。"
+        },
+        {
+          "id": "assess_cognition",
+          "label": "認知機能（簡易）",
+          "response": "【MMSE】24／30点。日付・場所はおおむね可能。2段階の指示は、繰り返すと理解できる。"
+        },
+        {
+          "id": "assess_sit_to_stand",
+          "label": "立ち上がり評価",
+          "response": null,
+          "log_action": "start_sit_to_stand"
+        },
+        {
+          "id": "assess_standing",
+          "label": "立位保持（歩行器）",
+          "response": "【立位保持（歩行器使用）】歩行器を把持して立位を保持できる。左下肢への荷重は少なく、右下肢で支えている（荷重の目安：右 8：左 2）。保持中、左股関節の痛みで表情がゆがむ。",
+          "if_assist": {
+            "assist_pelvis": "【立位保持（歩行器使用）】骨盤を支えたことで荷重の偏りが軽減し、左下肢にも軽く荷重できた（荷重の目安：右 7：左 3）。痛みの訴えは軽くなった。"
+          }
+        },
+        {
+          "id": "assess_gait",
+          "label": "歩行（歩行器）",
+          "response": "【歩行器歩行】介助下で前方へ4歩。患側（左）を先に出し、右を揃える。歩幅は小さく、左立脚の時間は短い。前傾位で歩行器に体重をかけている。痛みの訴えあり（NRS 5）。",
+          "if_assist": {
+            "assist_trunk": "【歩行器歩行】体幹を支えたことで前傾が減り、歩行器を押し出す動作が安定した。歩幅は小さいが、左立脚の時間がやや延びた。痛み（NRS 4）。",
+            "assist_pelvis": "【歩行器歩行】骨盤を支えたことで右への傾きが減り、左立脚の時間がやや延びた。歩幅は小さい。痛み（NRS 4）。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "label": "安全確認",
+      "type": "result",
+      "items": [
+        {
+          "id": "check_patient",
+          "label": "患者の状態を確認する",
+          "response": "意識は清明で、顔色は良好。点滴・ドレーンは抜去済み。"
+        },
+        {
+          "id": "check_wheelchair_brake",
+          "label": "車椅子のブレーキを確認する",
+          "response": "車椅子のブレーキがかかっていることを確認した。"
+        },
+        {
+          "id": "check_hip_precautions",
+          "label": "脱臼肢位（股関節の禁忌肢位）を確認する",
+          "response": "後方アプローチのため、股関節の過度な屈曲（90°超）・内転・内旋を避けることを患者と確認した。ベッド脇に注意書きが貼られている。"
+        },
+        {
+          "id": "check_walker",
+          "label": "歩行器の高さ・安定性を確認する",
+          "response": "歩行器のグリップが大転子の高さに合っていることを確認した。ストッパーとゴムキャップに異常はない。"
+        },
+        {
+          "id": "check_pre_stand_safety",
+          "label": "立ち上がり前の安全を確認する",
+          "response": "周囲に障害物はなく、床は乾いている。滑りにくい靴に履き替えた。"
+        }
+      ]
+    },
+    {
+      "id": "assist",
+      "label": "介助・声かけ",
+      "type": "result",
+      "hint": "（患者の体幹・骨盤に手を近づけて触れても介助できます）",
+      "items": [
+        {
+          "id": "assist_voice",
+          "label": "声かけをする",
+          "response": "「ゆっくりで大丈夫です。まず右の足に体重をのせて立ちましょう。左足は痛みのない範囲で。」と伝えた。患者は「はい、お願いします」と答えた。"
+        },
+        {
+          "id": "assist_trunk",
+          "label": "体幹を支える",
+          "response": "患者の体幹を支え、前傾の大きさを調整する。",
+          "effect": "trunk",
+          "zone": true
+        },
+        {
+          "id": "assist_pelvis",
+          "label": "骨盤を支える",
+          "response": "患者の骨盤を支え、右への傾きと荷重の偏りを抑える。",
+          "effect": "pelvis",
+          "zone": true
+        }
+      ]
+    }
+  ],
+  "sit_to_stand": {
+    "during_text": "患者が歩行器を使って立ち上がります。\n動作をよく観察してください。",
+    "after_text": "立ち上がり動作が終わりました。\n気づいた点を観察してください。",
+    "observations": [
+      {
+        "id": "observe_trunk_lean",
+        "label": "体幹の動き",
+        "response": "疼痛への恐れから体幹を大きく前傾し、離臀までにためらう時間があった。",
+        "if_assist": {
+          "assist_trunk": "体幹を支えたことで過度な前傾が減り、ためらいが短くなって離臀できた。"
+        }
+      },
+      {
+        "id": "observe_weight_shift",
+        "label": "荷重のかけ方",
+        "response": "右下肢で体重を支え、左下肢にはほとんど荷重しなかった。上体は右へ傾いた。",
+        "if_assist": {
+          "assist_pelvis": "骨盤を支えたことで右への偏りが軽減し、左足にも軽く荷重できた。"
+        }
+      },
+      {
+        "id": "observe_pain_response",
+        "label": "疼痛・表情",
+        "response": "離臀時に顔をしかめ、「痛い」と訴えた。立位になると表情はやや和らいだ。ふらつきは軽度。"
+      }
+    ]
+  },
+  "judgement": {
+    "steps": [
+      {
+        "id": "problem",
+        "type": "rank",
+        "max_select": 3,
+        "prompt": "この患者の問題点を、重要だと思う順に最大3つ選んでください。\n（選んだ順が優先順位です。もう一度押すと取り消せます）",
+        "log_prefix": "select_problem",
+        "options": [
+          {
+            "id": "pain_limited_loading",
+            "label": "疼痛による左下肢への荷重制限",
+            "weight": 3,
+            "rationale": "立ち上がり時NRS 6で、左への荷重を避ける。動作を制限する主因"
+          },
+          {
+            "id": "hip_dislocation_risk",
+            "label": "脱臼肢位への注意（後方アプローチ）",
+            "weight": 2,
+            "rationale": "深い屈曲・内転・内旋で脱臼の危険があり、肢位の管理が必要"
+          },
+          {
+            "id": "orthostatic_dizziness",
+            "label": "起立時のふらつき（血圧低下）",
+            "weight": 2,
+            "rationale": "立位後に132→118 mmHgへ低下し、ふらつきを訴える"
+          },
+          {
+            "id": "weak_hip_muscles",
+            "label": "左股関節周囲の筋力低下",
+            "weight": 2,
+            "rationale": "MMTは3前後で、左立脚の支持性が不足している"
+          },
+          {
+            "id": "fear_of_falling",
+            "label": "転倒への恐怖感",
+            "weight": 1,
+            "rationale": "転倒歴があり「立つのが怖い」と話すが、動作の主因ではない"
+          },
+          {
+            "id": "right_hemiparesis",
+            "label": "右下肢の運動麻痺",
+            "weight": 0,
+            "rationale": "麻痺はなく、右下肢の筋力は保たれている"
+          },
+          {
+            "id": "severe_dyspnea",
+            "label": "強い息切れ",
+            "weight": 0,
+            "rationale": "呼吸状態に異常はなく、SpO2も保たれている"
+          }
+        ]
+      },
+      {
+        "id": "action",
+        "prompt": "次にどのような対応をしますか？",
+        "log_prefix": "select_action",
+        "options": [
+          {
+            "id": "adjust_and_start_gradually",
+            "label": "疼痛と血圧を確認しながら、介助方法を調整して段階的に歩行器歩行を始める",
+            "correct": true,
+            "score": 2
+          },
+          {
+            "id": "wait_until_pain_settles",
+            "label": "疼痛が落ち着くまで、今日は立位練習のみにする",
+            "correct": false,
+            "score": 1
+          },
+          {
+            "id": "hand_guided_walk",
+            "label": "歩行器を使わず、手引きで歩かせる",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "floor_pickup_practice",
+            "label": "股関節を深く曲げて、床の物を拾う練習をする",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "stairs_now",
+            "label": "すぐに階段昇降の練習を始める",
+            "correct": false,
+            "score": 0
+          }
+        ]
+      }
+    ]
+  },
+  "scoring": {
+    "safety_cap_when_error": 1,
+    "safety_errors": [
+      {
+        "id": "brake_not_checked",
+        "requires": "check_wheelchair_brake",
+        "before": "start_sit_to_stand",
+        "message": "移乗前には車椅子ブレーキを必ず確認してください。"
+      },
+      {
+        "id": "hip_precautions_not_checked",
+        "requires": "check_hip_precautions",
+        "before": "start_sit_to_stand",
+        "message": "術後は立ち上がり前に、股関節の禁忌肢位（屈曲90°超・内転・内旋）を確認してください。"
+      }
+    ],
+    "domains": [
+      {
+        "id": "safety",
+        "label": "Safety",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "check_patient",
+            "short": "患者の状態確認"
+          },
+          {
+            "id": "ask_pain",
+            "short": "疼痛の確認"
+          },
+          {
+            "id": "ask_dizziness",
+            "short": "立ちくらみの確認"
+          },
+          {
+            "id": "check_hip_precautions",
+            "short": "脱臼肢位の確認"
+          },
+          {
+            "id": "check_walker",
+            "short": "歩行器の確認"
+          }
+        ],
+        "two": 4,
+        "one": 2,
+        "good": "立ち上がり前に{items}を行えました。",
+        "missed": "立ち上がり前に{items}を行っていません。"
+      },
+      {
+        "id": "communication",
+        "label": "Communication",
+        "type": "coverage",
+        "items": [
+          {
+            "id": "ask_pain",
+            "short": "痛みの聴取"
+          },
+          {
+            "id": "ask_precautions",
+            "short": "術後の注意点の聴取"
+          },
+          {
+            "id": "ask_prior_adl",
+            "short": "入院前の生活の聴取"
+          },
+          {
+            "id": "ask_fall",
+            "short": "転倒歴の聴取"
+          },
+          {
+            "id": "ask_goal",
+            "short": "希望の聴取"
+          },
+          {
+            "id": "assist_voice",
+            "short": "立ち上がりの声かけ"
+          }
+        ],
+        "two": 5,
+        "one": 2,
+        "good": "{items}を行えました。",
+        "missed": "{items}を行っていません。"
+      },
+      {
+        "id": "observation",
+        "label": "Observation",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "observe_wound",
+            "short": "創部と腫れ"
+          },
+          {
+            "id": "observe_leg_position",
+            "short": "下肢の肢位"
+          },
+          {
+            "id": "observe_weight_bearing",
+            "short": "左右の荷重"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を観察できました。",
+        "missed": "立ち上がり前の{items}の観察がありませんでした。"
+      },
+      {
+        "id": "assessment",
+        "label": "Assessment",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "required": [
+          {
+            "id": "start_sit_to_stand",
+            "short": "立ち上がり評価"
+          }
+        ],
+        "required_missed": "立ち上がり評価を実施しませんでした。",
+        "items": [
+          {
+            "id": "assess_pain",
+            "short": "疼痛評価"
+          },
+          {
+            "id": "assess_rom",
+            "short": "関節可動域"
+          },
+          {
+            "id": "assess_mmt",
+            "short": "下肢筋力"
+          },
+          {
+            "id": "assess_vitals",
+            "short": "バイタルサイン"
+          },
+          {
+            "id": "assess_sitting_balance",
+            "short": "座位バランス"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を評価できました。",
+        "missed": "立ち上がり前の{items}の評価がありませんでした。"
+      },
+      {
+        "id": "reasoning",
+        "label": "Clinical reasoning",
+        "type": "rank",
+        "step": "problem",
+        "good": "最優先の問題点（疼痛による荷重制限）を1位に選べました。",
+        "partial": "最優先の問題点は選べましたが、順位が1位ではありませんでした。",
+        "irrelevant": "今回の患者に当てはまらない問題点（{items}）を選んでいます。",
+        "correct_text": "最優先の問題点は「{correct}」でした。"
+      },
+      {
+        "id": "action",
+        "label": "Action selection",
+        "type": "choice",
+        "step": "action",
+        "good": "推奨される対応を選択できました。",
+        "correct_text": "推奨される対応は「{correct}」でした。"
+      }
+    ]
+  }
+}

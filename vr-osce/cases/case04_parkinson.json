@@ -1,0 +1,592 @@
+{
+  "station_id": "parkinson_gait_04",
+  "title": "パーキンソン病患者のすくみ足と歩行の評価（歩行器歩行前）",
+  "time_limit_sec": 420,
+  "room": {
+    "number": "301",
+    "name": "山本 修"
+  },
+  "patient": {
+    "model": "./assets/patient_case04.glb",
+    "motion": {
+      "type": "parkinson",
+      "severity": 1,
+      "speed": 0.9,
+      "walker": true,
+      "hands": "walker",
+      "breath": {
+        "rate": 16,
+        "amp": 1
+      }
+    },
+    "voice": {
+      "pitch": 0.85,
+      "rate": 0.72,
+      "pause": false
+    }
+  },
+  "props": {
+    "wheelchair": false
+  },
+  "intro": "あなたは担当理学療法士です。\n\n75歳男性、パーキンソン病（Hoehn-Yahr III〜IV）。薬剤調整のための入院中で、歩行器を使用しています。\n\n歩き始めや方向転換での「すくみ足」と転倒の不安があります。立ち上がりと歩行の前に評価を行い、安全に歩行練習を進められるか判断してください。\n\n制限時間：7分",
+  "menu": [
+    {
+      "id": "interview",
+      "label": "問診",
+      "type": "dialogue",
+      "items": [
+        {
+          "id": "ask_walk_difficulty",
+          "label": "歩きにくいのは、どんな時ですか？",
+          "response": "歩き始めるときに、足が床にくっついたように出ません。狭い所や、向きを変えるときに止まってしまいます。",
+          "say": [
+            "歩きにく",
+            "あるきにく",
+            "歩きづら",
+            "あるきづら",
+            "どんな時",
+            "どんなとき",
+            "足が出",
+            "あしがで",
+            "すくみ",
+            "止ま",
+            "とま",
+            "歩き始め",
+            "あるきはじめ",
+            "歩き出し",
+            "向きを変",
+            "困って",
+            "こまって",
+            "歩く時",
+            "歩くとき"
+          ]
+        },
+        {
+          "id": "ask_freezing_time",
+          "label": "足が出にくくなる時間帯や、薬との関係はありますか？",
+          "response": "昼ご飯のあとが多いです。午前中でも急に出にくくなることがあります。薬は決まった時間に飲んでいます。",
+          "say": [
+            "時間帯",
+            "じかんたい",
+            "時間",
+            "薬",
+            "くすり",
+            "服薬",
+            "ふくやく",
+            "飲んで",
+            "のんで",
+            "効いて",
+            "きいて",
+            "昼",
+            "ひる",
+            "午前",
+            "ごぜん",
+            "朝",
+            "あさ",
+            "調子の波",
+            "波"
+          ]
+        },
+        {
+          "id": "ask_fall",
+          "label": "転んだことはありますか？",
+          "response": "この3か月で2回転びました。後ろに倒れそうになることがあります。",
+          "say": [
+            "転",
+            "ころ",
+            "転倒",
+            "てんとう",
+            "倒れ",
+            "たおれ",
+            "つまづ",
+            "つまず",
+            "ふらつ",
+            "後ろに",
+            "うしろに"
+          ]
+        },
+        {
+          "id": "ask_dizziness",
+          "label": "立ち上がるとき、めまいやふらつきはありませんか？",
+          "response": "立ったときに、ふらっとすることが時々あります。",
+          "say": [
+            "めまい",
+            "立ちくらみ",
+            "たちくらみ",
+            "ふらっと",
+            "ふらふら",
+            "立ち上が",
+            "たちあが",
+            "気分",
+            "気持ち悪",
+            "体調",
+            "たいちょう",
+            "くらくら",
+            "立つとき"
+          ]
+        },
+        {
+          "id": "ask_prior_adl",
+          "label": "入院前の生活はどうでしたか？",
+          "response": "妻と二人暮らしです。家の中では歩行器を使っています。敷居のところで足が止まりやすいです。",
+          "say": [
+            "入院前",
+            "にゅういんまえ",
+            "生活",
+            "せいかつ",
+            "家",
+            "いえ",
+            "自宅",
+            "じたく",
+            "家族",
+            "かぞく",
+            "お住まい",
+            "おすまい",
+            "普段",
+            "ふだん",
+            "日常",
+            "にちじょう",
+            "以前",
+            "前は",
+            "暮らし",
+            "くらし",
+            "歩行器",
+            "ほこうき",
+            "敷居",
+            "しきい",
+            "トイレ",
+            "といれ"
+          ]
+        },
+        {
+          "id": "ask_goal",
+          "label": "これからどうなりたいですか？",
+          "response": "転ばずに、家の中を安全に歩けるようになりたいです。",
+          "say": [
+            "これから",
+            "どうなりたい",
+            "希望",
+            "きぼう",
+            "目標",
+            "もくひょう",
+            "願い",
+            "ねがい",
+            "したい",
+            "なりたい",
+            "退院",
+            "たいいん",
+            "帰り",
+            "かえり",
+            "今後",
+            "こんご"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "label": "観察",
+      "type": "finding",
+      "items": [
+        {
+          "id": "observe_posture",
+          "label": "座位姿勢",
+          "response": "体幹が前に傾き、頭が前に出ている（円背）。肩は内側に丸まっている。"
+        },
+        {
+          "id": "observe_face_voice",
+          "label": "表情・声",
+          "response": "表情は乏しく、まばたきが少ない。声は小さく、抑揚が少ない。"
+        },
+        {
+          "id": "observe_tremor",
+          "label": "振戦・動作の速さ",
+          "response": "安静時の手の震えは目立たない。動作は全体にゆっくりで、動き出すまでに時間がかかる。"
+        },
+        {
+          "id": "observe_environment",
+          "label": "歩行器・周囲の環境",
+          "response": "歩行器を使用している。廊下は平らだが、病室の出入口に小さな段差（敷居）がある。"
+        }
+      ]
+    },
+    {
+      "id": "assess",
+      "label": "評価項目",
+      "type": "result",
+      "items": [
+        {
+          "id": "assess_vitals",
+          "label": "バイタルサイン（血圧・脈拍）",
+          "response": "【座位・安静】血圧 124／72 mmHg、脈拍 68 回/分、SpO2 97%。",
+          "if_state": {
+            "stood": "【立位直後】血圧 104／60 mmHg、脈拍 74 回/分。立位後にふらつきの訴えがある。"
+          }
+        },
+        {
+          "id": "assess_rigidity",
+          "label": "筋強剛・関節可動域",
+          "response": "頸部・体幹・右上肢に軽度の筋強剛（歯車様）。股関節・膝関節の伸展は −10°。"
+        },
+        {
+          "id": "assess_postural_reflex",
+          "label": "姿勢反射（後方への引き込み）",
+          "response": "後方へ軽く引くと立て直す反応が遅れ、数歩後ろに下がる。支えがないと倒れる危険がある。"
+        },
+        {
+          "id": "assess_muscle",
+          "label": "下肢筋力",
+          "response": "【MMT】下肢 4レベル（左右差なし）。"
+        },
+        {
+          "id": "assess_sit_to_stand",
+          "label": "立ち上がり評価",
+          "response": null,
+          "log_action": "start_sit_to_stand"
+        },
+        {
+          "id": "assess_standing",
+          "label": "立位保持",
+          "response": "【立位保持】前傾・円背の姿勢で、歩行器につかまって保持できる。保持中に体幹が小さく前後に揺れる。見守りが必要。"
+        },
+        {
+          "id": "assess_gait",
+          "label": "歩行（歩行器で前方へ数歩）",
+          "response": "【歩行】歩き出しまでに約2秒かかる（すくみ）。その後は歩幅が小さく、すり足で、進むにつれて歩幅がさらに小さく、足の運びが速くなる。方向を変えるときは足が止まりやすい。",
+          "if_assist": {
+            "assist_visual_cue": "【歩行】床に目印を置いたことで、歩き出しまでの時間が短くなった。歩幅が大きくなり、前方へ数歩進めた。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "label": "安全確認",
+      "type": "result",
+      "items": [
+        {
+          "id": "check_patient",
+          "label": "患者の状態を確認する",
+          "response": "意識は清明で、会話は成立する。動作は遅いが、指示は理解できている。"
+        },
+        {
+          "id": "check_walker",
+          "label": "歩行器の高さ・状態を確認する",
+          "response": "歩行器の高さはグリップが手首の高さに合っている。ストッパーとゴム足は問題ない。"
+        },
+        {
+          "id": "check_environment",
+          "label": "周囲の環境（床・段差・障害物）を確認する",
+          "response": "床は乾いていて障害物はない。出入口の敷居を避け、広い通路で行う。進行方向に休める椅子を用意した。"
+        },
+        {
+          "id": "check_stop_criteria",
+          "label": "運動の中止基準を確認する",
+          "response": "中止基準：強いふらつき、後方への転倒しそうな動揺、立位での血圧低下の症状、すくみが続いて動けなくなった場合。"
+        }
+      ]
+    },
+    {
+      "id": "assist",
+      "label": "介助・声かけ",
+      "type": "result",
+      "items": [
+        {
+          "id": "assist_voice",
+          "label": "声かけをする",
+          "response": "「ゆっくり立ちましょう。足が止まったら教えてください。」と伝えた。患者は「はい」とうなずいた。"
+        },
+        {
+          "id": "assist_visual_cue",
+          "label": "視覚的な合図（床の目印）を出す",
+          "effect": "cue",
+          "response": "床に目印のテープを置き、「この線をまたぎましょう」と声をかけた。患者は目印を見て、足を出しやすくなった。"
+        },
+        {
+          "id": "assist_auditory_cue",
+          "label": "掛け声（1、2、1、2）で合図する",
+          "response": "リズムに合わせようとしたが、この患者では歩き出しに変化はなかった。"
+        },
+        {
+          "id": "assist_guard",
+          "label": "後方で見守る位置につく",
+          "response": "患者の後方やや横に立ち、後ろへ倒れそうになった場合に支えられる位置をとった。"
+        }
+      ]
+    }
+  ],
+  "sit_to_stand": {
+    "during_text": "患者が立ち上がります。\n動作をよく観察してください。",
+    "after_text": "立ち上がり動作が終わりました。\n気づいた点を観察してください。",
+    "observations": [
+      {
+        "id": "observe_stand_motion",
+        "label": "立ち上がり動作",
+        "response": "体を前後に揺らして、立ち上がるまでに何度か反動をつけた。動き出しに時間がかかり、立ち上がりはゆっくりだった。"
+      },
+      {
+        "id": "observe_stand_posture",
+        "label": "立位姿勢",
+        "response": "前傾・円背のまま、膝を軽く曲げて立っている。歩行器のグリップにしっかりつかまっている。"
+      },
+      {
+        "id": "observe_balance",
+        "label": "立位のバランス",
+        "response": "立位後に体幹が小さく前後に揺れる。立位でふらつきの訴えがある。"
+      }
+    ]
+  },
+  "judgement": {
+    "steps": [
+      {
+        "id": "problem",
+        "type": "rank",
+        "max_select": 3,
+        "prompt": "この患者の問題点を、重要だと思う順に最大3つ選んでください。\n（選んだ順が優先順位です。もう一度押すと取り消せます）",
+        "log_prefix": "select_problem",
+        "options": [
+          {
+            "id": "freezing_fall_risk",
+            "label": "すくみ足と姿勢反射障害による転倒リスク",
+            "weight": 3,
+            "rationale": "歩き出し・方向転換でのすくみ、後方への立て直しの遅れ、3か月で2回の転倒歴があり、最優先"
+          },
+          {
+            "id": "stooped_small_steps",
+            "label": "前傾姿勢・小刻み歩行（動作の遅さ）",
+            "weight": 2,
+            "rationale": "歩幅が進むほど小さくなり、歩行の効率と安全性を下げる"
+          },
+          {
+            "id": "orthostatic_drop",
+            "label": "起立時の血圧低下とふらつき",
+            "weight": 2,
+            "rationale": "立位直後に血圧が低下し、ふらつきの訴えがある"
+          },
+          {
+            "id": "rigidity_rom",
+            "label": "筋強剛・関節可動域の制限",
+            "weight": 1,
+            "rationale": "軽度で、今回の動作の最優先ではない"
+          },
+          {
+            "id": "muscle_weakness",
+            "label": "下肢筋力の低下",
+            "weight": 1,
+            "rationale": "MMT 4で、主な制限因子ではない"
+          },
+          {
+            "id": "right_hemiparesis",
+            "label": "右下肢の運動麻痺",
+            "weight": 0,
+            "rationale": "麻痺はない。筋強剛と混同しない"
+          },
+          {
+            "id": "exertional_dyspnea",
+            "label": "労作時の呼吸困難",
+            "weight": 0,
+            "rationale": "息切れの訴えはない"
+          }
+        ]
+      },
+      {
+        "id": "action",
+        "prompt": "次にどのような対応をしますか？",
+        "log_prefix": "select_action",
+        "options": [
+          {
+            "id": "visual_cue_guarded_walk",
+            "label": "視覚的な合図で歩き出しを促し、後方で見守りながら、短い距離から歩行練習を進める",
+            "correct": true,
+            "score": 2
+          },
+          {
+            "id": "auditory_cue_only",
+            "label": "掛け声だけで合図して、歩行距離を延ばす",
+            "correct": false,
+            "score": 1
+          },
+          {
+            "id": "bed_rest_only",
+            "label": "転倒のリスクが高いため、歩行練習はせず、ベッド上で過ごすよう勧める",
+            "correct": false,
+            "score": 1
+          },
+          {
+            "id": "remove_walker",
+            "label": "歩行器を外して、介助なしで歩かせて自立度をみる",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "pull_to_walk",
+            "label": "足が止まったら、手を強く引いて歩かせる",
+            "correct": false,
+            "score": 0
+          }
+        ]
+      }
+    ]
+  },
+  "scoring": {
+    "safety_cap_when_error": 1,
+    "safety_errors": [
+      {
+        "id": "walker_not_checked",
+        "requires": "check_walker",
+        "before": "start_sit_to_stand",
+        "message": "立ち上がり・歩行の前に、歩行器の高さと状態を確認してください。"
+      }
+    ],
+    "domains": [
+      {
+        "id": "safety",
+        "label": "Safety",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "check_patient",
+            "short": "患者の状態確認"
+          },
+          {
+            "id": "check_walker",
+            "short": "歩行器の確認"
+          },
+          {
+            "id": "check_environment",
+            "short": "周囲の環境確認"
+          },
+          {
+            "id": "check_stop_criteria",
+            "short": "中止基準の確認"
+          },
+          {
+            "id": "ask_fall",
+            "short": "転倒歴の確認"
+          }
+        ],
+        "two": 4,
+        "one": 2,
+        "good": "立ち上がり前に{items}を行えました。",
+        "missed": "立ち上がり前に{items}を行っていません。"
+      },
+      {
+        "id": "communication",
+        "label": "Communication",
+        "type": "coverage",
+        "items": [
+          {
+            "id": "ask_walk_difficulty",
+            "short": "歩きにくい場面の聴取"
+          },
+          {
+            "id": "ask_freezing_time",
+            "short": "時間帯・薬との関係の聴取"
+          },
+          {
+            "id": "ask_fall",
+            "short": "転倒歴の聴取"
+          },
+          {
+            "id": "ask_dizziness",
+            "short": "めまい・ふらつきの聴取"
+          },
+          {
+            "id": "ask_prior_adl",
+            "short": "入院前の生活の聴取"
+          },
+          {
+            "id": "assist_voice",
+            "short": "立ち上がりの声かけ"
+          }
+        ],
+        "two": 5,
+        "one": 2,
+        "good": "{items}を行えました。",
+        "missed": "{items}を行っていません。"
+      },
+      {
+        "id": "observation",
+        "label": "Observation",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "observe_posture",
+            "short": "座位姿勢"
+          },
+          {
+            "id": "observe_face_voice",
+            "short": "表情・声"
+          },
+          {
+            "id": "observe_tremor",
+            "short": "振戦・動作の速さ"
+          },
+          {
+            "id": "observe_environment",
+            "short": "歩行器・環境"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を観察できました。",
+        "missed": "立ち上がり前の{items}の観察がありませんでした。"
+      },
+      {
+        "id": "assessment",
+        "label": "Assessment",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "required": [
+          {
+            "id": "start_sit_to_stand",
+            "short": "立ち上がり評価"
+          }
+        ],
+        "required_missed": "立ち上がり評価を実施しませんでした。",
+        "items": [
+          {
+            "id": "assess_vitals",
+            "short": "血圧・脈拍"
+          },
+          {
+            "id": "assess_rigidity",
+            "short": "筋強剛・可動域"
+          },
+          {
+            "id": "assess_postural_reflex",
+            "short": "姿勢反射"
+          },
+          {
+            "id": "assess_muscle",
+            "short": "筋力"
+          }
+        ],
+        "two": 3,
+        "one": 1,
+        "good": "立ち上がり前に{items}を評価できました。",
+        "missed": "立ち上がり前の{items}の評価がありませんでした。"
+      },
+      {
+        "id": "reasoning",
+        "label": "Clinical reasoning",
+        "type": "rank",
+        "step": "problem",
+        "good": "最優先の問題点（すくみ足・姿勢反射障害による転倒リスク）を1位に選べました。",
+        "partial": "最優先の問題点は選べましたが、順位が1位ではありませんでした。",
+        "irrelevant": "今回の患者に当てはまらない問題点（{items}）を選んでいます。",
+        "correct_text": "最優先の問題点は「{correct}」でした。"
+      },
+      {
+        "id": "action",
+        "label": "Action selection",
+        "type": "choice",
+        "step": "action",
+        "good": "推奨される対応を選択できました。",
+        "correct_text": "推奨される対応は「{correct}」でした。"
+      }
+    ]
+  }
+}

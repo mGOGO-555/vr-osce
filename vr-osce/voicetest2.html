@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音声認識テスト（Whisper）</title>
+<style>
+  body { font-family: system-ui, "Noto Sans JP", sans-serif; margin: 0; padding: 20px; background: #eef2f4; color: #1f2d33; font-size: 22px; line-height: 1.6; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  .card { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 14px 0; box-shadow: 0 1px 6px rgba(0,0,0,.12); }
+  h2 { font-size: 24px; margin: 0 0 6px; }
+  button { font-size: 22px; padding: 12px 22px; margin: 6px 8px 6px 0; border: 0; border-radius: 10px; background: #2f6f8f; color: #fff; }
+  button:disabled { background: #9db3bd; }
+  select { font-size: 20px; padding: 8px; }
+  pre { white-space: pre-wrap; background: #f6f8f9; padding: 10px; border-radius: 8px; font-size: 20px; }
+  .small { font-size: 18px; color: #55666d; }
+</style>
+</head>
+<body>
+<h1>音声認識テスト（Quest内で処理）</h1>
+<div class="small">声は外部に送らず、Questの中だけで認識します。初回はモデルの読み込みに時間がかかります（Wi-Fi接続で）。</div>
+
+<div class="card">
+  <h2>1. モデルを読み込む</h2>
+  モデル：
+  <select id="model">
+    <option value="onnx-community/whisper-tiny" selected>tiny（小さい・速い／約40MB）</option>
+    <option value="onnx-community/whisper-base">base（やや大きい・精度高め／約80MB）</option>
+  </select><br>
+  <button id="btnLoad">モデルを読み込む</button>
+  <pre id="loadOut">（未読み込み）</pre>
+</div>
+
+<div class="card">
+  <h2>2. 話して認識する</h2>
+  <button id="btnRec" disabled>録音を始める</button>
+  <div class="small">「録音を始める」→ 話す（例：「痛みはありますか」）→ もう一度押して止める。</div>
+  <pre id="recOut">（結果がここに出ます）</pre>
+</div>
+
+<div class="card">
+  <h2>3. 結果のまとめ</h2>
+  <button id="btnSum">まとめを表示</button>
+  <pre id="sum"></pre>
+</div>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const R = { model: null, device: null, loadSec: null, runs: [], error: null, webgpu: !!navigator.gpu };
+let asr = null, rec = null, chunks = [], stream = null, t0 = 0;
+
+$('btnLoad').onclick = async () => {
+  $('btnLoad').disabled = true; $('loadOut').textContent = '読み込み中…（初回は1〜3分かかることがあります）';
+  const t = performance.now(); R.model = $('model').value;
+  try {
+    const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3');
+    const prog = (p) => { if (p.status === 'progress') $('loadOut').textContent = `ダウンロード中：${(p.file || '').split('/').pop()}  ${Math.round(p.progress || 0)}%`; };
+    try {
+      asr = await pipeline('automatic-speech-recognition', R.model, { device: 'wasm', dtype: 'q8', progress_callback: prog });
+      R.device = 'wasm';
+    } catch (e1) { throw e1; }
+    R.loadSec = ((performance.now() - t) / 1000).toFixed(1);
+    $('loadOut').textContent = `読み込み完了（${R.loadSec}秒）`; $('btnRec').disabled = false;
+  } catch (e) { R.error = String(e && e.message || e); $('loadOut').textContent = '失敗：' + R.error; $('btnLoad').disabled = false; }
+};
+
+async function toFloat16k(blob) {
+  const buf = await blob.arrayBuffer();
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const ab = await ctx.decodeAudioData(buf); ctx.close();
+  const off = new OfflineAudioContext(1, Math.ceil(ab.duration * 16000), 16000);
+  const src = off.createBufferSource(); src.buffer = ab; src.connect(off.destination); src.start();
+  const out = await off.startRendering(); return out.getChannelData(0);
+}
+
+$('btnRec').onclick = async () => {
+  if (!rec) {
+    try { stream = stream || await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { $('recOut').textContent = 'マイクを使えません：' + e.name; return; }
+    chunks = []; rec = new MediaRecorder(stream); rec.ondataavailable = (e) => chunks.push(e.data);
+    rec.onstop = async () => {
+      $('recOut').textContent = '認識中…'; const t = performance.now();
+      try {
+        const audio = await toFloat16k(new Blob(chunks, { type: rec.mimeType }));
+        const res = await asr(audio, { language: 'japanese', task: 'transcribe' });
+        const sec = ((performance.now() - t) / 1000).toFixed(1);
+        const len = (audio.length / 16000).toFixed(1);
+        R.runs.push({ text: res.text, sec, len });
+        $('recOut').textContent = `認識結果：${res.text}\n（録音 ${len}秒 → 認識に ${sec}秒）`;
+      } catch (e) { R.error = String(e && e.message || e); $('recOut').textContent = '失敗：' + R.error; }
+      rec = null; $('btnRec').textContent = '録音を始める';
+    };
+    rec.start(); $('btnRec').textContent = '録音を止めて認識する'; $('recOut').textContent = '録音中…話してください。';
+  } else { rec.stop(); }
+};
+
+$('btnSum').onclick = () => {
+  $('sum').textContent = [
+    `モデル：${R.model}　読み込み：${R.loadSec}秒　方式：${R.device}`,
+    `WebGPU：${R.webgpu}`,
+    ...R.runs.map((r, i) => `${i + 1}回目：「${r.text}」 録音${r.len}秒／認識${r.sec}秒`),
+    `エラー：${R.error || 'なし'}`,
+    `ブラウザ：${navigator.userAgent}`,
+  ].join('\n');
+};
+</script>
+</body>
+</html>

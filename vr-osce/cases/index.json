@@ -1,0 +1,26 @@
+[
+  {
+    "id": "case01",
+    "file": "./cases/case01_stroke.json",
+    "label": "症例1：脳卒中片麻痺（72歳男性）立ち上がり・移乗前評価",
+    "short": "症例1：脳卒中（72歳男性）"
+  },
+  {
+    "id": "case02",
+    "file": "./cases/case02_hip_fracture.json",
+    "label": "症例2：大腿骨頸部骨折術後（81歳女性）立ち上がり・歩行器歩行前評価",
+    "short": "症例2：大腿骨頸部骨折術後（81歳女性）"
+  },
+  {
+    "id": "case03",
+    "file": "./cases/case03_copd.json",
+    "label": "症例3：COPD急性増悪後（66歳男性）労作時呼吸状態の評価",
+    "short": "症例3：COPD（66歳男性）"
+  },
+  {
+    "id": "case04",
+    "file": "./cases/case04_parkinson.json",
+    "label": "症例4：パーキンソン病（75歳男性）すくみ足・歩行器歩行前評価",
+    "short": "症例4：パーキンソン病（75歳男性）"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "_note": "質問項目ID → 患者音声ファイル（このフォルダ内）。実ファイルは未配置。ファイルを置いたら下の対応が有効になる。",
+  "ask_pain": "pain_01.wav",
+  "ask_dizziness": "dizziness_01.wav",
+  "ask_standing_history": "standing_history_01.wav",
+  "ask_right_foot_sensation": "right_foot_sensation_01.wav"
+}

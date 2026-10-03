@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音声テスト（Quest用）</title>
+<style>
+  body { font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif; margin: 0; padding: 20px; background: #eef2f4; color: #1f2d33; font-size: 22px; line-height: 1.6; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  .card { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 14px 0; box-shadow: 0 1px 6px rgba(0,0,0,.12); }
+  h2 { font-size: 24px; margin: 0 0 6px; }
+  button { font-size: 22px; padding: 12px 22px; margin: 6px 8px 6px 0; border: 0; border-radius: 10px; background: #2f6f8f; color: #fff; }
+  .ok { color: #1b7a3a; font-weight: 700; } .ng { color: #b3261e; font-weight: 700; } .mid { color: #8a6100; font-weight: 700; }
+  #meter { height: 22px; background: #dde5e9; border-radius: 6px; overflow: hidden; margin: 8px 0; }
+  #bar { height: 100%; width: 0%; background: #2f6f8f; }
+  pre { white-space: pre-wrap; background: #f6f8f9; padding: 10px; border-radius: 8px; font-size: 18px; }
+  .small { font-size: 18px; color: #55666d; }
+</style>
+</head>
+<body>
+<h1>音声テスト（VR-OSCE用）</h1>
+<div class="small">Quest のブラウザでこのページを開き、上から順に押してください。最後の「結果のまとめ」を先生（または私）に見せてください。</div>
+
+<div class="card">
+  <h2>0. 環境</h2>
+  <div id="env"></div>
+</div>
+
+<div class="card">
+  <h2>1. 患者の声（読み上げ）</h2>
+  <div id="voices"></div>
+  <button id="btnSpeak">「痛みはありますか」を読み上げる</button>
+  <div class="small">音が聞こえたら成功です。聞こえ方（声の高さ・速さ・聞き取りやすさ）も確認してください。</div>
+</div>
+
+<div class="card">
+  <h2>2. マイク</h2>
+  <button id="btnMic">マイクを許可して音量を見る</button>
+  <div id="meter"><div id="bar"></div></div>
+  <div id="micMsg" class="small">許可の確認が出たら「許可」を選び、声を出してください。バーが動けば成功です。</div>
+</div>
+
+<div class="card">
+  <h2>3. 声の認識（日本語）</h2>
+  <div id="srSupport"></div>
+  <button id="btnSR">認識を開始（「痛みはありますか」と話す）</button>
+  <pre id="srOut">（結果がここに出ます）</pre>
+</div>
+
+<div class="card">
+  <h2>結果のまとめ</h2>
+  <button id="btnSum">まとめを表示</button>
+  <pre id="sum"></pre>
+</div>
+
+<script>
+const R = { secure: window.isSecureContext, ua: navigator.userAgent, tts: null, ttsJa: null, speakHeard: null, mic: null, srApi: !!(window.SpeechRecognition || window.webkitSpeechRecognition), sr: null, srText: '' };
+const $ = (id) => document.getElementById(id);
+const tag = (ok, t) => `<span class="${ok === true ? 'ok' : ok === false ? 'ng' : 'mid'}">${t}</span>`;
+
+$('env').innerHTML = `安全な接続（HTTPS）：${tag(R.secure, R.secure ? 'はい' : 'いいえ（マイク不可）')}<br><span class="small">${R.ua}</span>`;
+
+// 1. 読み上げ
+const tts = 'speechSynthesis' in window ? window.speechSynthesis : null;
+R.tts = !!tts;
+function showVoices() {
+  if (!tts) { $('voices').innerHTML = `読み上げ機能：${tag(false, '使えません')}`; return; }
+  const vs = tts.getVoices(); const ja = vs.filter(v => /^ja/i.test(v.lang));
+  R.ttsJa = ja.length;
+  $('voices').innerHTML = `読み上げ機能：${tag(true, 'あり')}　声の数：${vs.length}　日本語の声：${tag(ja.length > 0, ja.length + '件')}<br><span class="small">${ja.map(v => v.name).join('、') || '（日本語の声なし）'}</span>`;
+}
+showVoices(); if (tts) tts.addEventListener('voiceschanged', showVoices);
+$('btnSpeak').onclick = () => {
+  if (!tts) return;
+  tts.cancel(); const u = new SpeechSynthesisUtterance('動かすと左の足の付け根が痛みます。'); u.lang = 'ja-JP';
+  const ja = tts.getVoices().find(v => /^ja/i.test(v.lang)); if (ja) u.voice = ja; u.rate = 0.85;
+  u.onstart = () => { R.speakHeard = 'started'; }; u.onerror = (e) => { R.speakHeard = 'error: ' + e.error; $('voices').innerHTML += '<br>' + tag(false, 'エラー：' + e.error); };
+  tts.speak(u);
+};
+
+// 2. マイク
+let micStream = null, raf = 0;
+$('btnMic').onclick = async () => {
+  try {
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    R.mic = 'ok';
+    $('micMsg').innerHTML = tag(true, 'マイクを使えます') + '　声を出してバーが動くか確認してください。';
+    const ctx = new (window.AudioContext || window.webkitAudioContext)(); const src = ctx.createMediaStreamSource(micStream);
+    const an = ctx.createAnalyser(); an.fftSize = 512; src.connect(an); const buf = new Uint8Array(an.fftSize);
+    let peak = 0;
+    (function loop() { an.getByteTimeDomainData(buf); let m = 0; for (const v of buf) m = Math.max(m, Math.abs(v - 128)); const lv = Math.min(100, m * 1.6); peak = Math.max(peak, lv); $('bar').style.width = lv + '%'; R.micPeak = Math.round(peak); raf = requestAnimationFrame(loop); })();
+  } catch (e) { R.mic = 'error: ' + e.name; $('micMsg').innerHTML = tag(false, 'マイクを使えません：' + e.name); }
+};
+
+// 3. 音声認識
+$('srSupport').innerHTML = `ブラウザの音声認識（Web Speech API）：${tag(R.srApi, R.srApi ? 'あり' : 'なし')}`;
+$('btnSR').onclick = () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { $('srOut').textContent = '音声認識の機能がありません。'; R.sr = 'no api'; return; }
+  const rec = new SR(); rec.lang = 'ja-JP'; rec.interimResults = true; rec.maxAlternatives = 3;
+  $('srOut').textContent = '聞いています…話してください。';
+  const log = [];
+  rec.onresult = (e) => { const r = e.results[e.results.length - 1]; const t = r[0].transcript; R.srText = t; $('srOut').textContent = (r.isFinal ? '【確定】' : '（途中）') + t + '　信頼度 ' + (r[0].confidence ? r[0].confidence.toFixed(2) : '不明'); if (r.isFinal) R.sr = 'ok'; };
+  rec.onerror = (e) => { R.sr = 'error: ' + e.error; $('srOut').textContent = '認識エラー：' + e.error; };
+  rec.onend = () => { if (!R.sr) R.sr = 'ended without result'; };
+  try { R.sr = null; rec.start(); } catch (e) { R.sr = 'start error: ' + e.name; $('srOut').textContent = '開始できません：' + e.name; }
+};
+
+// まとめ
+$('btnSum').onclick = () => {
+  $('sum').textContent = [
+    `HTTPS：${R.secure}`,
+    `読み上げ機能：${R.tts}　日本語の声：${R.ttsJa}　読み上げ結果：${R.speakHeard}（聞こえたか：手で確認）`,
+    `マイク：${R.mic}　最大音量：${R.micPeak ?? '-'}`,
+    `音声認識API：${R.srApi}　認識結果：${R.sr}　認識文字：${R.srText}`,
+    `ブラウザ：${R.ua}`,
+  ].join('\n');
+};
+</script>
+</body>
+</html>

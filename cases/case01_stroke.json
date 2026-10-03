@@ -1,0 +1,563 @@
+{
+  "station_id": "stroke_sts_01",
+  "title": "脳卒中片麻痺患者の立ち上がり・移乗前評価",
+  "room": {
+    "number": "305",
+    "name": "田中 一郎"
+  },
+  "patient": {
+    "model": "./assets/patient_case01.glb",
+    "placement": {
+      "x": 0.5,
+      "z": -1.0,
+      "yaw_deg": 90
+    },
+    "bedmob": true,
+    "motion": {
+      "type": "hemiparesis",
+      "side": "right",
+      "severity": 1,
+      "breath": {
+        "rate": 16,
+        "amp": 1
+      }
+    },
+    "voice": {
+      "pitch": 0.8,
+      "rate": 0.85
+    }
+  },
+  "props": {
+    "wheelchair": true
+  },
+  "time_limit_sec": 420,
+  "intro": "あなたは担当理学療法士です。\n\n72歳男性、脳卒中後右片麻痺、発症後3週間。\n\nベッドサイドで患者の状態を評価し、安全に立ち上がり・移乗が可能か判断してください。\n\n制限時間：7分",
+  "bed_mobility": {
+    "during_text": "患者が起き上がります。\n動作を観察してください。",
+    "after_text": "起き上がり動作が終わりました。\n気づいた点を観察してください。",
+    "observations": [
+      {
+        "id": "observe_bm_roll",
+        "label": "寝返り",
+        "response": "左（非麻痺側）へ寝返った。頭部と上部体幹が先に回旋し、骨盤が遅れて追従した。"
+      },
+      {
+        "id": "observe_bm_paretic_limbs",
+        "label": "右（麻痺側）上下肢",
+        "response": "右上肢は支持に使われなかった。右下肢は左下肢にやや遅れてベッド端から降りた。"
+      },
+      {
+        "id": "observe_bm_push_up",
+        "label": "起き上がり",
+        "response": "左肘、続いて左手でベッドを支えて上体を起こし、端座位になった。"
+      }
+    ]
+  },
+  "sit_to_stand": {
+    "during_text": "患者が立ち上がります。\n動作をよく観察してください。",
+    "after_text": "立ち上がり動作が終わりました。\n気づいた点を観察してください。",
+    "observations": [
+      {
+        "id": "observe_trunk_lean",
+        "label": "体幹の動き",
+        "response": "体幹の前傾がやや不足したまま、臀部が離床した。",
+        "if_assist": {
+          "assist_trunk": "体幹の前傾を介助で誘導したことで、十分な前傾が得られ、スムーズに臀部が離床した。"
+        }
+      },
+      {
+        "id": "observe_foot_after_stand",
+        "label": "足部と荷重",
+        "response": "右足が前方に残ったまま立ち上がった。左下肢への荷重が増えた。",
+        "if_assist": {
+          "assist_pelvis": "骨盤を支えたことで、左下肢への荷重の偏りが軽減した。右足は前方に残ったまま立ち上がった。"
+        }
+      },
+      {
+        "id": "observe_knee_instability",
+        "label": "右膝の状態",
+        "response": "立位直後に右膝の支持性が低下し、軽度の膝折れがみられた。",
+        "if_assist": {
+          "assist_right_knee": "右膝を支えたことで、立位直後の膝折れはみられなかった。"
+        }
+      }
+    ]
+  },
+  "judgement": {
+    "steps": [
+      {
+        "id": "problem",
+        "type": "rank",
+        "max_select": 3,
+        "prompt": "この患者の問題点を、重要だと思う順に最大3つ選んでください。\n（選んだ順が優先順位です。もう一度押すと取り消せます）",
+        "log_prefix": "select_problem",
+        "options": [
+          {
+            "id": "right_leg_support",
+            "label": "右下肢の支持性低下（右膝折れ）",
+            "weight": 3,
+            "rationale": "立ち上がりで右膝折れ。MMT膝伸展3、Brunnstrom Ⅲ。転倒に直結するため最優先"
+          },
+          {
+            "id": "weight_shift_left",
+            "label": "荷重の左側への偏り",
+            "weight": 2,
+            "rationale": "座位6:4、立位7:3で左へ偏り、右下肢で支えにくい"
+          },
+          {
+            "id": "foot_position",
+            "label": "右足部が前方に残る",
+            "weight": 2,
+            "rationale": "足部が前方だと荷重移動が不十分になりやすい"
+          },
+          {
+            "id": "trunk_lean",
+            "label": "体幹の前傾不足",
+            "weight": 2,
+            "rationale": "前傾不足のまま離臀すると重心移動が不十分"
+          },
+          {
+            "id": "left_leg_weakness",
+            "label": "左下肢の筋力低下",
+            "weight": 1,
+            "rationale": "左下肢はMMT5で保たれており、優先度は低い"
+          },
+          {
+            "id": "severe_dizziness",
+            "label": "強いめまい",
+            "weight": 0,
+            "rationale": "めまいの訴えはない"
+          },
+          {
+            "id": "paretic_sensory_impairment",
+            "label": "麻痺側の感覚障害",
+            "weight": 1,
+            "rationale": "右下肢の感覚は軽度低下（触覚7/10、位置覚3/5）。ただし最優先ではない"
+          }
+        ]
+      },
+      {
+        "id": "action",
+        "prompt": "次にどのような対応をしますか？",
+        "log_prefix": "select_action",
+        "options": [
+          {
+            "id": "walk_as_is",
+            "label": "そのまま歩行させる",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "adjust_and_reassess",
+            "label": "足部位置と介助方法を調整して再評価する",
+            "correct": true,
+            "score": 2
+          },
+          {
+            "id": "repeat_stand_unassisted",
+            "label": "介助なしで繰り返し立たせる",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "fast_walk_now",
+            "label": "すぐに高速歩行を行う",
+            "correct": false,
+            "score": 0
+          },
+          {
+            "id": "end_assessment",
+            "label": "評価を終了する",
+            "correct": false,
+            "score": 0
+          }
+        ]
+      }
+    ]
+  },
+  "menu": [
+    {
+      "id": "interview",
+      "label": "問診",
+      "type": "dialogue",
+      "items": [
+        {
+          "id": "ask_pain",
+          "label": "痛みはありますか？",
+          "response": "右肩が少し痛いです。",
+          "say": [
+            "いたくな",
+            "きつい所",
+            "ずきずき",
+            "どこか痛",
+            "いたい",
+            "つらい",
+            "痛くな",
+            "違和感",
+            "いた",
+            "痛い",
+            "辛い",
+            "痛"
+          ]
+        },
+        {
+          "id": "ask_dizziness",
+          "label": "めまいや気分不良はありませんか？",
+          "response": "ありません。",
+          "say": [
+            "たいちょう",
+            "たちくらみ",
+            "気持ちわる",
+            "立ちくらみ",
+            "くらくら",
+            "ふらふら",
+            "ぼうっと",
+            "ぼーっと",
+            "気持ち悪",
+            "はきけ",
+            "ふらつ",
+            "めまい",
+            "吐き気",
+            "目が回",
+            "体調",
+            "気分",
+            "頭が"
+          ]
+        },
+        {
+          "id": "ask_standing_history",
+          "label": "これまで立ったことはありますか？",
+          "response": "リハビリで何度か立ちました。",
+          "say": [
+            "リハビリで",
+            "おきあが",
+            "これまで",
+            "すわって",
+            "起き上が",
+            "たった",
+            "たてま",
+            "座って",
+            "立った",
+            "立てま",
+            "たち",
+            "立ち",
+            "立つ",
+            "立位"
+          ]
+        },
+        {
+          "id": "ask_right_foot_sensation",
+          "label": "右足の感覚は分かりますか？",
+          "response": "左より少し分かりにくいです。",
+          "say": [
+            "かんかく",
+            "かんじ",
+            "しびれ",
+            "動かし",
+            "右の足",
+            "足の感",
+            "さわ",
+            "まひ",
+            "みぎ",
+            "右側",
+            "右足",
+            "感じ",
+            "感覚",
+            "痺れ",
+            "足は",
+            "麻痺",
+            "触"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "label": "観察",
+      "type": "finding",
+      "items": [
+        {
+          "id": "observe_posture",
+          "label": "座位姿勢",
+          "response": "座位は保持できている。体幹はやや左側へ傾いている。"
+        },
+        {
+          "id": "observe_weight_bearing",
+          "label": "左右の荷重",
+          "response": "体重は主に左側へ偏っている。"
+        },
+        {
+          "id": "observe_foot_position",
+          "label": "足部位置",
+          "response": "右足部が左足部よりやや前方に位置している。"
+        },
+        {
+          "id": "observe_paretic_arm",
+          "label": "麻痺側上肢",
+          "response": "右上肢は麻痺側で、体側から大腿上に置かれている。"
+        },
+        {
+          "id": "observe_arousal",
+          "label": "患者の覚醒状態",
+          "response": "意識は清明で、簡単な指示を理解している。"
+        }
+      ]
+    },
+    {
+      "id": "assess",
+      "label": "評価項目",
+      "type": "result",
+      "items": [
+        {
+          "id": "assess_sensation",
+          "label": "感覚検査",
+          "response": "【感覚検査】右下肢は左に比べて軽度に低下。\n表在感覚（触覚）：右 7/10（左 10/10）\n深部感覚（位置覚）：右 3/5 回正答（左 5/5）"
+        },
+        {
+          "id": "assess_lower_limb_strength",
+          "label": "下肢筋力評価",
+          "response": "【MMT（徒手筋力検査）】\n右：股屈曲 3、股伸展 3、膝伸展 3、膝屈曲 3、足背屈 2、足底屈 3\n左：股・膝・足関節とも 5（保たれている）"
+        },
+        {
+          "id": "assess_motor_paralysis",
+          "label": "運動麻痺評価",
+          "response": "【運動麻痺の評価（右下肢）】\nBrunnstrom stage：Ⅲ（共同運動パターンでの随意運動が可能）\nFugl-Meyer 下肢運動項目：17/34点\nSIAS 運動機能：股屈曲テスト 3、膝伸展テスト 3、足パットテスト 2（各 0〜5）"
+        },
+        {
+          "id": "assess_sitting_balance",
+          "label": "座位バランス",
+          "response": "座位は上肢の支持なしで保持できる（静的）。体重は左側へ偏位し、体幹はやや左へ傾斜している。\n座位荷重 左:右 ≒ 6:4"
+        },
+        {
+          "id": "assess_bed_mobility",
+          "label": "起き上がり評価（仰臥位→端座位）",
+          "response": null,
+          "log_action": "start_bed_mobility"
+        },
+        {
+          "id": "assess_sit_to_stand",
+          "label": "立ち上がり評価",
+          "response": null,
+          "log_action": "start_sit_to_stand"
+        },
+        {
+          "id": "assess_standing",
+          "label": "立位保持",
+          "response": "【立位保持】支持物を用いて保持できるが、右膝の支持性が不安定。\n荷重 左:右 ≒ 7:3。持続は約10秒で、右膝の不安定さのため介助が必要になる。",
+          "if_assist": {
+            "assist_right_knee": "【立位保持】右膝を支えており、膝折れなく保持できた。\n荷重 左:右 ≒ 7:3（右膝を支えた状態で約10秒保持）。"
+          }
+        },
+        {
+          "id": "assess_gait",
+          "label": "歩行",
+          "response": "【歩行】介助下で数歩（約4歩）は可能。右立脚期に膝折れが生じやすく、介助量が多い。\nFAC（歩行自立度）：1（持続的な介助が必要）",
+          "if_assist": {
+            "assist_right_knee": "【歩行】右膝を支えることで膝折れなく数歩（約4歩）の歩行が可能だった。介助量は多い。\nFAC（歩行自立度）：1（持続的な介助が必要）"
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "label": "安全確認",
+      "type": "result",
+      "items": [
+        {
+          "id": "check_patient",
+          "label": "患者の状態を確認する",
+          "response": "意識は清明で、ベッド端で座位を保持している。"
+        },
+        {
+          "id": "check_wheelchair_brake",
+          "label": "車椅子のブレーキを確認する",
+          "response": "車椅子のブレーキを確認し、ロックした。"
+        },
+        {
+          "id": "check_pre_stand_safety",
+          "label": "立ち上がり前の安全を確認する",
+          "response": "周囲に障害物はなく、立ち上がるスペースが確保されている。"
+        }
+      ]
+    },
+    {
+      "id": "assist",
+      "label": "介助・声かけ",
+      "type": "result",
+      "items": [
+        {
+          "id": "assist_voice",
+          "label": "声かけをする",
+          "response": "「立ちますよ。体を前に倒して、1、2の3で立ちましょう。」と合図を伝えた。患者は「はい」と答えた。"
+        },
+        {
+          "id": "assist_right_knee",
+          "label": "右膝を支える",
+          "response": "患者の右膝を前方から支え、膝が折れないよう介助する。",
+          "effect": "knee",
+          "zone": true
+        },
+        {
+          "id": "assist_trunk",
+          "label": "体幹を支える",
+          "response": "患者の体幹を支え、前傾を誘導する。",
+          "effect": "trunk",
+          "zone": true
+        },
+        {
+          "id": "assist_pelvis",
+          "label": "骨盤を支える",
+          "response": "患者の骨盤を支え、左右への重心の偏りを抑える。",
+          "effect": "pelvis",
+          "zone": true
+        }
+      ],
+      "hint": "（患者の右膝・体幹・骨盤に手を近づけて触れても介助できます）"
+    }
+  ],
+  "scoring": {
+    "safety_cap_when_error": 1,
+    "safety_errors": [
+      {
+        "id": "brake_not_checked",
+        "requires": "check_wheelchair_brake",
+        "before": "start_sit_to_stand",
+        "message": "移乗前には車椅子ブレーキを必ず確認してください。"
+      }
+    ],
+    "domains": [
+      {
+        "id": "safety",
+        "label": "Safety",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "items": [
+          {
+            "id": "check_patient",
+            "short": "患者の状態確認"
+          },
+          {
+            "id": "ask_pain",
+            "short": "疼痛の確認"
+          },
+          {
+            "id": "ask_dizziness",
+            "short": "めまい・気分不良の確認"
+          },
+          {
+            "id": "assist_right_knee",
+            "short": "右膝の介助"
+          }
+        ],
+        "two": 4,
+        "one": 1,
+        "good": "立ち上がり前に{items}を行えました。",
+        "missed": "立ち上がり前に{items}を行っていません。"
+      },
+      {
+        "id": "communication",
+        "label": "Communication",
+        "type": "coverage",
+        "items": [
+          {
+            "id": "ask_pain",
+            "short": "痛みの聴取"
+          },
+          {
+            "id": "ask_dizziness",
+            "short": "めまい・気分不良の聴取"
+          },
+          {
+            "id": "ask_standing_history",
+            "short": "立位経験の聴取"
+          },
+          {
+            "id": "ask_right_foot_sensation",
+            "short": "右足の感覚の聴取"
+          },
+          {
+            "id": "assist_voice",
+            "short": "立ち上がりの声かけ"
+          }
+        ],
+        "two": 5,
+        "one": 1,
+        "good": "{items}を行えました。",
+        "missed": "{items}を行っていません。"
+      },
+      {
+        "id": "observation",
+        "label": "Observation",
+        "type": "coverage",
+        "items": [
+          {
+            "id": "observe_foot_position",
+            "short": "立ち上がり前の右足部位置",
+            "before": "start_sit_to_stand"
+          },
+          {
+            "id": "observe_weight_bearing",
+            "short": "左右の荷重"
+          }
+        ],
+        "two": 2,
+        "one": 1,
+        "good": "{items}を観察できました。",
+        "missed": "{items}の観察がありませんでした。"
+      },
+      {
+        "id": "assessment",
+        "label": "Assessment",
+        "type": "coverage",
+        "before": "start_sit_to_stand",
+        "required": [
+          {
+            "id": "start_sit_to_stand",
+            "short": "立ち上がり評価"
+          }
+        ],
+        "required_missed": "立ち上がり評価を実施しませんでした。",
+        "items": [
+          {
+            "id": "assess_sensation",
+            "short": "感覚検査"
+          },
+          {
+            "id": "assess_lower_limb_strength",
+            "short": "下肢筋力評価"
+          },
+          {
+            "id": "assess_sitting_balance",
+            "short": "座位バランス"
+          },
+          {
+            "id": "assess_motor_paralysis",
+            "short": "運動麻痺評価"
+          }
+        ],
+        "two": 2,
+        "one": 0,
+        "good": "立ち上がり前に{items}を評価できました。",
+        "missed": "立ち上がり前の{items}の評価がありませんでした。"
+      },
+      {
+        "id": "reasoning",
+        "label": "Clinical reasoning",
+        "type": "rank",
+        "step": "problem",
+        "good": "最優先の問題点（右下肢の支持性低下）を1位に選べました。",
+        "partial": "最優先の問題点は選べましたが、順位が1位ではありませんでした。",
+        "irrelevant": "今回の患者に当てはまらない問題点（{items}）を選んでいます。",
+        "correct_text": "最優先の問題点は「{correct}」でした。"
+      },
+      {
+        "id": "action",
+        "label": "Action selection",
+        "type": "choice",
+        "step": "action",
+        "good": "推奨される対応を選択できました。",
+        "correct_text": "推奨される対応は「{correct}」でした。"
+      }
+    ]
+  }
+}

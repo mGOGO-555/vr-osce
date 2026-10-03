@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>音声1往復テスト（case01）</title>
+<style>
+  body { font-family: system-ui, "Noto Sans JP", sans-serif; margin: 0; padding: 20px; background: #eef2f4; color: #1f2d33; font-size: 22px; line-height: 1.6; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  .card { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 14px 0; box-shadow: 0 1px 6px rgba(0,0,0,.12); }
+  h2 { font-size: 24px; margin: 0 0 6px; }
+  button { font-size: 22px; padding: 12px 22px; margin: 6px 8px 6px 0; border: 0; border-radius: 10px; background: #2f6f8f; color: #fff; }
+  button:disabled { background: #9db3bd; }
+  pre { white-space: pre-wrap; background: #f6f8f9; padding: 10px; border-radius: 8px; font-size: 22px; }
+  .small { font-size: 18px; color: #55666d; }
+  .ng { color: #b3261e; font-weight: bold; }
+  .ok { color: #1b6e3c; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>音声1往復テスト（case01・PoC）</h1>
+<div class="small">マイク → Quest内の音声認識(Whisper tiny, asr.js) → case01の既存Q&A照合 → 録音済み患者音声の再生。speechSynthesis / Web Speech API は使いません。</div>
+
+<div class="card">
+  <h2>1. モデルを読み込む</h2>
+  <button id="btnLoad">モデルを読み込む（マイク許可）</button>
+  <pre id="loadOut">（未読み込み）</pre>
+</div>
+
+<div class="card">
+  <h2>2. 患者へ質問する</h2>
+  <button id="btnRec" disabled>録音開始</button>
+  <div class="small">「録音開始」→ 質問する（例：「痛みはありますか」）→ 「録音停止」。</div>
+  <pre id="out">認識結果：\n患者回答：\n音声：</pre>
+</div>
+
+<div class="card">
+  <h2>患者音声ファイルの配置状況</h2>
+  <pre id="files">（確認中）</pre>
+  <div class="small">配置先：assets/voice/case01/（対応表は manifest.json）。</div>
+</div>
+
+<script type="module">
+import { asr, prepare, startRecording, stopAndRecognize, matchItem } from './asr.js';
+const $ = (id) => document.getElementById(id);
+const DIR = './assets/voice/case01/';
+let CASE = null, MAN = {}, ctx = null, cur = null;
+const buffers = {};   // 質問ID → デコード済み音声（無ければ null）
+
+// 既存のcase01 JSON（症例内容は読み取りのみ）
+const items = () => CASE.menu.filter((m) => m.type === 'dialogue').flatMap((m) => m.items);
+const respOf = (it) => (typeof it.response === 'string' ? it.response : JSON.stringify(it.response));
+
+async function loadFiles() {
+  CASE = await (await fetch('./cases/case01_stroke.json')).json();
+  try { MAN = await (await fetch(DIR + 'manifest.json')).json(); } catch (e) { MAN = {}; }
+  const lines = [];
+  for (const it of items()) {
+    const f = MAN[it.id]; let state = '未登録';
+    if (f) {
+      try {
+        const r = await fetch(DIR + f);
+        const ct = r.headers.get('content-type') || '';
+        if (r.ok && !ct.includes('text/html')) { buffers[it.id] = await r.arrayBuffer(); state = '配置済'; } else { buffers[it.id] = null; state = '音声ファイル未配置'; }
+      } catch (e) { buffers[it.id] = null; state = '音声ファイル未配置'; }
+    }
+    lines.push(`${it.id}（${it.label}） → ${f || '-'} ：${state}`);
+  }
+  $('files').textContent = lines.join('\n');
+}
+
+// ユーザー操作の中で呼ぶ：AudioContextをresume（Questのautoplay制限対策）
+function unlockAudio() {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+}
+async function playFor(id) {
+  const raw = buffers[id];
+  if (!raw) return '音声ファイル未配置';
+  try {
+    const ab = await ctx.decodeAudioData(raw.slice(0));
+    if (cur) { try { cur.stop(); } catch (e) { /* noop */ } }
+    cur = ctx.createBufferSource(); cur.buffer = ab; cur.connect(ctx.destination); cur.start();
+    return '再生中（' + MAN[id] + '）';
+  } catch (e) { return '再生失敗：' + (e.message || e); }
+}
+
+asr.onChange = () => {
+  if (asr.status === 'loading') $('loadOut').textContent = '読み込み中… ' + asr.note + '（初回は1〜3分）';
+  else if (asr.status === 'ready') { $('loadOut').textContent = '読み込み完了'; $('btnRec').disabled = false; }
+  else if (asr.status === 'error') { $('loadOut').textContent = '失敗：' + asr.note; $('btnLoad').disabled = false; }
+};
+$('btnLoad').onclick = () => { unlockAudio(); $('btnLoad').disabled = true; prepare(); };
+
+let recording = false;
+$('btnRec').onclick = async () => {
+  unlockAudio();
+  if (!recording) {
+    if (!startRecording()) { $('out').textContent = '録音を開始できません'; return; }
+    recording = true; $('btnRec').textContent = '録音停止'; $('out').textContent = '録音中…話してください。';
+  } else {
+    recording = false; $('btnRec').disabled = true; $('out').textContent = '認識中…';
+    const text = await stopAndRecognize();
+    const it = text ? matchItem(text, items()) : null;
+    let sound = '-';
+    if (it) sound = await playFor(it.id);
+    $('out').innerHTML = '';
+    const t = (s) => document.createTextNode(s);
+    $('out').append(t(`認識結果：${text || '（認識できませんでした）'}\n`),
+      t(`患者回答：${it ? respOf(it) : '（該当する質問なし）'}\n`),
+      t(`照合した質問：${it ? it.id + '（' + it.label + '）' : '-'}\n`),
+      t('音声：' + sound));
+    $('btnRec').textContent = '録音開始'; $('btnRec').disabled = false;
+  }
+};
+loadFiles().catch((e) => { $('files').textContent = '読み込み失敗：' + e; });
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>半側空間無視 体験(教育用WebXR)</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #fff; font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; }
+    #stage { position: fixed; inset: 0; }
+    #bar { position: fixed; left: 8px; top: 8px; right: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+           background: rgba(255,255,255,.92); border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; font-size: 13px; z-index: 5; }
+    #bar button { font: inherit; padding: 6px 10px; border: 1px solid #94a3b8; border-radius: 6px; background: #f1f5f9; cursor: pointer; }
+    #bar button:disabled { opacity: .45; cursor: default; }
+    #vr-slot { position: relative; min-width: 190px; height: 40px; }
+    #vr-slot button { position: absolute !important; bottom: auto !important; top: 0; left: 0 !important; transform: none !important; width: 190px; }
+    #hint { color: #475569; flex-basis: 100%; }
+    body.in-xr #bar { display: none; }
+  </style>
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three/build/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+  </script>
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="bar">
+    <div id="vr-slot"></div>
+    <button id="dl-grab" disabled>把持ログ CSV</button>
+    <button id="dl-yaw" disabled>頭部ヨー CSV</button>
+    <button id="dl-json" disabled>要約 JSON</button>
+    <span id="run-count"></span>
+    <div id="hint">教育用モデル: 患者の主観的体験の再現ではなく、左側への探索・注意の低下と右への偏りを体験します。
+      PCプレビュー: マウス=手(クリックでつかむ/ボタン), A/D=頭部の左右回旋, W/S=上下, Shift=手を持ち上げ</div>
+  </div>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
